@@ -1,0 +1,27 @@
+service: get-total-policy-bice
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: test
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+    packager: yarn
+
+package:
+  individually: true
+
+functions:
+  getTotalPolicy:
+    handler: handlers/getTotalPolicy.handler
+    events:
+      - http:
+          method: get
+          path: getTotalPolicy
