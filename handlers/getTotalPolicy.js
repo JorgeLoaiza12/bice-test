@@ -15,34 +15,36 @@ export const handler = async () => {
     const workers = workersData.map((workerInfo) => {
       const worker = new Worker({ ...workerInfo, companyPercentage, hasDentalCare });
 
-      return worker.calculatePolicyCost();
+      return { ...workerInfo, ...worker.calculatePolicyCost() };
     });
 
-    // Calculate total company cost of all workers in uf
-    const totalCompanyCostUF = workers
-      .reduce((acum, { company }) => acum + (company.healthCost + company.dentalCost), 0)
-      .toFixed(2);
-
-    // Calculate total workers cost of all workers in uf
-    const totalWorkerCostUF = workers
-      .reduce((acum, { worker }) => acum + (worker.healthCost + worker.dentalCost), 0)
-      .toFixed(2);
+    const [totalCompanyCostUF, totalWorkerCostUF] = workers.reduce(
+      (acum, { company, worker }) => {
+        return [
+          // Calculate total company cost of all workers in uf
+          (acum[0] += company.healthCost + company.dentalCost),
+          // Calculate total worker cost of all workers in uf
+          (acum[1] += worker.healthCost + worker.dentalCost),
+        ];
+      },
+      [0, 0]
+    );
 
     // Calculate total company cost of all workers in clp
-    const totalCompanyCostCLP = (totalCompanyCostUF * Number(ufValue)).toFixed(0);
+    const totalCompanyCostCLP = totalCompanyCostUF * Number(ufValue);
 
     // Calculate total workers cost of all workers in clp
-    const totalWorkerCostCLP = (totalWorkerCostUF * Number(ufValue)).toFixed(0);
+    const totalWorkerCostCLP = totalWorkerCostUF * Number(ufValue);
 
     return {
       statusCode: 200,
       body: JSON.stringify({
         data: {
           workers,
-          totalCompanyCostUF,
-          totalWorkerCostUF,
-          totalCompanyCostCLP,
-          totalWorkerCostCLP,
+          totalCompanyCostUF: Number(totalCompanyCostUF.toFixed(2)),
+          totalWorkerCostUF: Number(totalWorkerCostUF.toFixed(2)),
+          totalCompanyCostCLP: Number(totalCompanyCostCLP.toFixed(0)),
+          totalWorkerCostCLP: Number(totalWorkerCostCLP.toFixed(0)),
         },
       }),
     };
