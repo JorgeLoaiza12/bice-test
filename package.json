@@ -9,7 +9,14 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.19.2",
+    "prettier": "^2.0.5",
     "source-map-support": "^0.5.19"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "semi": true,
+    "trailingComma": "es5"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
