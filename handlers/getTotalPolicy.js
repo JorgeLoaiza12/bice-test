@@ -15,7 +15,7 @@ export const handler = async () => {
     const workers = workersData.map((workerInfo) => {
       const worker = new Worker({ ...workerInfo, companyPercentage, hasDentalCare });
 
-      return { ...workerInfo, ...worker.calculatePolicyCost() };
+      return { ...worker.calculatePolicyCost() };
     });
 
     const [totalCompanyCostUF, totalWorkerCostUF] = workers.reduce(
