@@ -8,6 +8,10 @@ provider:
   name: aws
   runtime: nodejs6.10
   stage: test
+  environment:
+    INSURANCE_URL: https://dn8mlk7hdujby.cloudfront.net/interview/insurance
+    SBIF_URL: https://api.sbif.cl/api-sbifv3/recursos_api
+    SBIF_API_KEY: 2209c2db625566e0cfaea0dee0a98eb1f577f95f
 
 custom:
   webpack:
